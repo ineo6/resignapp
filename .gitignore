@@ -1,0 +1,4 @@
+node_modules
+*.ipa
+workSpace
+log.txt

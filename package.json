@@ -1,0 +1,33 @@
+{
+  "name": "repack",
+  "version": "1.0.0",
+  "description": "",
+  "main": "bin/pack-app.js",
+  "bin": {
+    "resignapp": "bin/pack-app.js",
+    "easy-app-install": "install.js"
+  },
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "chalk": "^2.4.1",
+    "colors": "^1.3.1",
+    "commander": "^2.16.0",
+    "download-git-repo": "^1.0.2",
+    "fs-extra": "^7.0.0",
+    "inquirer": "^6.0.0",
+    "minimist": "^1.2.0",
+    "ora": "^3.0.0",
+    "shelljs": "^0.8.2",
+    "which": "^1.3.1"
+  },
+  "optionalDependencies": {
+    "node-ios-device": "^1.6.2"
+  }
+}
