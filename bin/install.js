@@ -4,7 +4,6 @@
 
 const iosDevice = require('node-ios-device');
 const program = require('commander');
-const chalk = require('chalk');
 
 program.version("1.0.0")
     .option('-a, --app <path>', 'the path of app.')

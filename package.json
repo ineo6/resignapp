@@ -1,11 +1,11 @@
 {
-  "name": "repack",
+  "name": "rebuildapp",
   "version": "1.0.0",
-  "description": "",
+  "description": "Resign iOS app with dynamic library.",
   "main": "bin/pack-app.js",
   "bin": {
-    "resignapp": "bin/pack-app.js",
-    "easy-app-install": "install.js"
+    "rebuildapp": "bin/pack-app.js",
+    "easy-app-install": "bin/install.js"
   },
   "directories": {
     "lib": "lib"
