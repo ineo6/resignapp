@@ -124,7 +124,7 @@ module.exports = class SignApp {
 
     ensureDirExist(path.dirname(output));
 
-    if (!isDirectory(mobileprovision) && !fileExist(mobileprovision)) {
+    if (mobileprovision && !isDirectory(mobileprovision) && !fileExist(mobileprovision)) {
       mobileprovision = path.join(currentWorkingDirectory, mobileprovision);
     }
     // console.log("keychain:" + keychain + "\n" + "ipa:" + ipaFile + "\n" + "identity:" + identity + "\n" +"output:" + output + "\n" + "mobileprovision:" + mobileprovision + "\n" + "bundleid:" + bundleId + "\n");

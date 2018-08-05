@@ -2,10 +2,10 @@
 exec </dev/tty
 
 # passed params
-SOURCEIPA="$1"
+ipaFile="$1"
 DEVELOPER="$2"
 #provisitionFile
-MOBILEPROV="$3"
+provisitionFile="$3"
 TARGET="$4"
 KEYCHAIN="$5"
 AUTO=$6
@@ -140,7 +140,14 @@ fi
 
 echo "===================="`date +%Y年%m月%d日`"====================" >> "$logFile"
 
-inputFlag=1
+if [ -n "$DEVELOPER" ]
+then
+    inputFlag=0
+    distributionCer=DEVELOPER
+else
+    inputFlag=1
+fi
+
 while [ $inputFlag == 1 ]
 do
     echo "证书如下，请选择一个（输入序号如：1）即可"
@@ -159,19 +166,26 @@ do
     fi
 done
 
-# 获取当前目录
-ipaFile=`pwd`/*.ipa
-getFileSum "$ipaFile"
-if [ $? -gt 1 ]
+if [ -z "$ipaFile" ]
 then
-    quitProgram "该文件夹中包含多个ipa，请只放置一个需重签名的ipa"
+    # 获取当前目录
+    ipaFile=`pwd`/*.ipa
+    getFileSum "$ipaFile"
+    echo $ipaFile
+    if [ $? -gt 1 ]
+    then
+        quitProgram "该文件夹中包含多个ipa，请只放置一个需重签名的ipa"
+    fi
 fi
 
-provisitionFile=`pwd`/*.mobileprovision
-getFileSum "$provisitionFile"
-if [ $? -gt 1 ]
+if [ -z "$provisitionFile" ]
 then
-    quitProgram "该文件夹中包含多个provisitionFile，请只放置一个需重签名的provisitionFile"
+    provisitionFile=`pwd`/*.mobileprovision
+    getFileSum "$provisitionFile"
+    if [ $? -gt 1 ]
+    then
+        quitProgram "该文件夹中包含多个provisitionFile，请只放置一个需重签名的provisitionFile"
+    fi
 fi
 
 # 1.文件验证
