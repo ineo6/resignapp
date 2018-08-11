@@ -1,6 +1,6 @@
 {
   "name": "rebuildapp",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Resign iOS app with dynamic library.",
   "main": "bin/pack-app.js",
   "bin": {
