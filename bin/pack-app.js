@@ -19,6 +19,7 @@ program.version(packageJson.version)
     .option('-m, --mobileprovision [FILE]]', 'Specify the mobileprovision file to use')
     .option('-o, --output [APP.ipa]', 'Path to the output IPA filename')
     .option('-ai, --auto', 'auto install')
+    .option('-d, --debug','debug mode')
     //.option('[ipafile]', 'Path to the IPA file to resign').arguments('<cmd> [env]')
     .arguments('<ipafile>')
     .action(function (ipafile) {
@@ -34,10 +35,10 @@ program.on('--help', function () {
     console.log('');
 });
 
-if (!process.argv.slice(2).length) {
-    program.outputHelp();
-    return false;
-}
+// if (!process.argv.slice(2).length) {
+//     program.outputHelp();
+//     return false;
+// }
 
 if (program.new || program.n) {
     newCli(process.argv);
@@ -52,12 +53,13 @@ const options = {
     mobileprovision: program.mobileprovision || "",
     keychain: program.keychain || "",
     auto: program.auto,
+    debug: program.debug,
 };
 
 const ca = new SignApp(options);
 
 if (!options.identity || !options.mobileprovision) {
-    console.log(chalk.yellow("Auto serach mobileprovision and identity"));
+    console.log(chalk.yellow("Will auto serach mobileprovision and identity"));
 }
 
 console.log(chalk.green("Begin resign..."));

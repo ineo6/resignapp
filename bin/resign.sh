@@ -9,7 +9,9 @@ provisitionFile="$3"
 TARGET="$4"
 KEYCHAIN="$5"
 AUTO=$6
-bundleId="$7"
+#是否删除工作目录 非debug模式删除工作目录以及隐藏工作目录
+Debug="$7"
+bundleId="$8"
 
 APP_PATH=$(pwd)
 TOOL=$APP_PATH/tool
@@ -29,9 +31,7 @@ workSpaceProvisionFile=""
 #输出文件夹
 outputFile=""
 #是否隐藏工作目录
-hiddenWorkspace=1
-#是否删除工作目录 非debug模式删除工作目录以及隐藏工作目录
-Debug=1
+hiddenWorkspace=0
 
 function msgActionShow()
 {
@@ -78,7 +78,7 @@ function createWorkSpace()
     (mkdir  $currentFile$workSpace)&& {
         if [ $hiddenWorkspace == 1 ]
         then
-            if [ $Debug == 0 ]
+            if [ !$Debug ]
             then
                 # chflags nohidden 显示指定隐藏文件
                 chflags hidden $currentFile$workSpace
@@ -104,7 +104,7 @@ function quitProgram()
         msgErrorShow $1
     fi
     
-    if [ $Debug == 0 ]
+    if [ !$Debug ]
     then
         rm -rf $workSpaceFile
     fi

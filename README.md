@@ -4,6 +4,25 @@ Rebuild and install app without jailbreak.
 
 # Usage
 
+```
+$ npm install rebuildapp -g
+$ mkdir tweak-demo && cd tweak-demo
+$ rebuildapp --new
+```
+
+pack ipa
+
+```
+// auto search
+$ rebuildapp
+
+// pass file
+$ rebuildapp  -i "iPhone Developer: xxx" -b "com.xx.test" -m ./embedded.mobileprovision -o result.ipa xxx.ipa
+```
+
+more command
+
+
 ```bash
   Usage: rebuildapp [--options ...] [ipafile]
 
@@ -22,4 +41,19 @@ Rebuild and install app without jailbreak.
 
     $ resignapp -i "iPhone Distribution:xxx" -b "com.xx.test" test-app.ipa
 
+```
+
+# Templates
+
+```
+.
+├── README.md
+├── embedded.mobileprovision
+├── lib                           # 待注入dylib
+│   └── *.dylib
+├── output
+├── tool                          # 工具
+│   ├── libsubstrate.dylib
+│   └── yololib
+└── workSpace                     # 工作区域
 ```
