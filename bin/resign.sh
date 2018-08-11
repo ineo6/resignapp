@@ -16,7 +16,8 @@ TOOL=$APP_PATH/tool
 LIB=$APP_PATH/lib
 #依赖
 LIBSUBSTRATE=libsubstrate.dylib
-LIBNAME=WeChatRedEnvelop.dylib
+#LIBNAME=WeChatRedEnvelop.dylib
+LIBNAME=""
 
 logFile="log.txt"
 #工作区域sub文件夹
@@ -34,7 +35,7 @@ Debug=1
 
 function msgActionShow()
 {
-	echo -e "\033[42;37m[执行]$1\033[0m"
+	echo -e "\033[32m[执行]$1\033[0m"
     echo `date +%H:%M:%S.%s`"[执行]$1" >> "$logFile"
 }
 function msgErrorShow()
@@ -110,22 +111,23 @@ function quitProgram()
     exit
 }
 
+# function getFileSum()
+# {
+#     resFile=`basename $1`
+#     arr=(${resFile// / })
+#     length=${#arr[@]}
+#     return $length
+# }
+
 function getFileSum()
 {
     resFile=`basename $1`
-    arr=(${resFile// / })
-    length=${#arr[@]}
+    length=$(find $1 -type f 2>/dev/null |wc -l)
     return $length
 }
+
 clear
 # ================================================
-msgSig "======================================="
-msgSig "|            ___     ___              |"
-msgSig "|           /   \\\\   /   \\\\             |"
-msgSig "|          ｜       \\\\___              |"
-msgSig "|          ｜           \\\\             |"
-msgSig "|           \\\\___/   \\\\___/             |"
-msgSig "======================================="
 
 curSysVersion=`sw_vers|grep ProductVersion|cut -d: -f2`
 curSysVersion=${curSysVersion//./}
@@ -171,7 +173,6 @@ then
     # 获取当前目录
     ipaFile=`pwd`/*.ipa
     getFileSum "$ipaFile"
-    echo $ipaFile
     if [ $? -gt 1 ]
     then
         quitProgram "该文件夹中包含多个ipa，请只放置一个需重签名的ipa"
@@ -185,6 +186,22 @@ then
     if [ $? -gt 1 ]
     then
         quitProgram "该文件夹中包含多个provisitionFile，请只放置一个需重签名的provisitionFile"
+    fi
+fi
+
+if [ -z "$LIBNAME"]
+then
+    LIBNAME=`pwd`/lib/*.dylib
+    getFileSum "$LIBNAME"
+
+    libResult=$?
+    if [ $libResult -gt 1 ]
+    then
+        quitProgram "文件夹中包含多个dylib文件"
+    elif [ $libResult -lt 1 ]
+    then
+        msgWarningShow "未找到dylib, 将只重新打包App"
+        LIBNAME=""
     fi
 fi
 
@@ -262,13 +279,16 @@ msgActionShow "拷贝"$TOOL/$LIBSUBSTRATE"-->"$appPath"开始"
 }
 msgActionShow "拷贝结束"
 
-# 复制tweak dylib
-msgActionShow "拷贝"${LIBNAME}"-->"$appPath"开始"
+if [ -n "$LIBNAME" ]
+then
+    # 复制tweak dylib
+    msgActionShow "拷贝"${LIBNAME}"-->"$appPath"开始"
 
-(cp $LIB/$LIBNAME ${appPath} >> "$logFile" 2>&1) || {
-    quitProgram \"$LIB/$LIBNAME\"拷贝失败
-}
-msgActionShow "拷贝结束"
+    (cp $LIB/$LIBNAME ${appPath} >> "$logFile" 2>&1) || {
+        quitProgram \"$LIB/$LIBNAME\"拷贝失败
+    }
+    msgActionShow "拷贝结束"
+fi
 
 # 7.修改info.plist
 msgActionShow "修改info.plist开始"
@@ -284,16 +304,19 @@ msgActionShow "修改info.plist结束"
 # 8.开始签名
 msgActionShow "签名开始"
 
-$TOOL/yololib $appPath/$LIBNAME
+if [ -n "$LIBNAME" ]
+then
+    $TOOL/yololib $appPath/$LIBNAME
 
-# 签名lib
-(codesign -fs "$distributionCer" --no-strict --entitlements=${entitlementsPlist} $appPath/${LIBNAME} >> "$logFile" 2>&1) || {
-    quitProgram \"$appPath/${LIBNAME}\"签名失败
-}
+    # 签名lib
+    (codesign -fs "$distributionCer" --no-strict --entitlements=${entitlementsPlist} $appPath/${LIBNAME} >> "$logFile" 2>&1) || {
+        quitProgram \"$appPath/${LIBNAME}\"签名失败
+    }
 
-(codesign -fs "$distributionCer" --no-strict --entitlements=${entitlementsPlist} $appPath/${LIBSUBSTRATE} >> "$logFile" 2>&1) || {
-    quitProgram \"$appPath/${LIBSUBSTRATE}\"签名失败
-}
+    (codesign -fs "$distributionCer" --no-strict --entitlements=${entitlementsPlist} $appPath/${LIBSUBSTRATE} >> "$logFile" 2>&1) || {
+        quitProgram \"$appPath/${LIBSUBSTRATE}\"签名失败
+    }
+fi
 
 # 对Frameworks
 for file in `ls $appPath/Frameworks` 
