@@ -191,8 +191,8 @@ fi
 
 if [ -z "$LIBNAME"]
 then
-    LIBNAME=`pwd`/lib/*.dylib
-    getFileSum "$LIBNAME"
+    LIBFULLNAME=`pwd`/lib/*.dylib
+    getFileSum "$LIBFULLNAME"
 
     libResult=$?
     if [ $libResult -gt 1 ]
@@ -202,6 +202,11 @@ then
     then
         msgWarningShow "未找到dylib, 将只重新打包App"
         LIBNAME=""
+    else
+        echo $libResult
+        echo 'test====='
+        LIBNAME=basename $LIBFULLNAME
+        echo $LIBNAME
     fi
 fi
 
