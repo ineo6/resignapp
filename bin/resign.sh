@@ -203,10 +203,7 @@ then
         msgWarningShow "未找到dylib, 将只重新打包App"
         LIBNAME=""
     else
-        echo $libResult
-        echo 'test====='
-        LIBNAME=basename $LIBFULLNAME
-        echo $LIBNAME
+        LIBNAME=`basename $LIBFULLNAME`
     fi
 fi
 
