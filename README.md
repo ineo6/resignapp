@@ -14,6 +14,8 @@ pack ipa
 
 ```
 // auto search
+// 1. find provisitionFile
+// 2. find bundleId
 $ rebuildapp
 
 // pass file
