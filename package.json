@@ -29,5 +29,8 @@
   },
   "optionalDependencies": {
     "node-ios-device": "^1.6.2"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
   }
 }
