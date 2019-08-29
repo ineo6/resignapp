@@ -90,7 +90,7 @@ function createWorkSpace()
     if ! ([ -d ${outputFile} ]); then
         mkdir  $outputFile
     fi
-    
+
     workSpaceIpaFile=$workSpaceFile"resign.ipa"
     workSpaceProvisionFile=$workSpaceFile"resign.mobileprovision"
     cp $1 $workSpaceIpaFile
@@ -103,7 +103,7 @@ function quitProgram()
     then
         msgErrorShow $1
     fi
-    
+
     if [ !$Debug ]
     then
         rm -rf $workSpaceFile
@@ -158,7 +158,7 @@ do
     read -p "Enter your choice:"
     #如果输入小于证书count&&大于0就是ok的，否则继续
     distributionCer=`/usr/bin/security find-identity -v -p codesigning|grep $REPLY\)|cut -d \" -f2`
-    if [ -z "$distributionCer" ] 
+    if [ -z "$distributionCer" ]
     then
         clear
         inputFlag=1
@@ -239,9 +239,9 @@ msgActionShow "开始验证provisionfile与证书是否匹配"
 provisionFileTeamId=${applicationIdentifier%%.*}
 cerTeamId=${distributionCer##*\(}
 test $cerTeamId = "$provisionFileTeamId"\)""
-if [ $? == 1 ] 
+if [ $? == 1 ]
 then
-    msgWarningShow "所选证书与provisionfile的group不匹配，是否继续？继续请按1"
+    msgWarningShow "所选证书"$cerTeamId"与provisionfile中"$provisionFileTeamId"不匹配，是否继续？继续请按1"
     read -p "Enter your choice:"
     if [ $REPLY != 1 ]; then
         quitProgram "所选证书与provisionfile的group不匹配"
@@ -308,7 +308,9 @@ msgActionShow "签名开始"
 
 if [ -n "$LIBNAME" ]
 then
-    $TOOL/yololib $appPath/$LIBNAME
+    executableFile=`/usr/libexec/PlistBuddy -c "Print :CFBundleExecutable" ${infoPlist}`
+
+    $TOOL/yololib $appPath/$executableFile $LIBNAME
 
     # 签名lib
     (codesign -fs "$distributionCer" --no-strict --entitlements=${entitlementsPlist} $appPath/${LIBNAME} >> "$logFile" 2>&1) || {
@@ -321,10 +323,10 @@ then
 fi
 
 # 对Frameworks
-for file in `ls $appPath/Frameworks` 
+for file in `ls $appPath/Frameworks`
 do
      (codesign -vvv -fs "$distributionCer" --no-strict --entitlements=${entitlementsPlist} $appPath/Frameworks/$file >> "$logFile" 2>&1) ||{
-        quitProgram "签名失败" 
+        quitProgram "签名失败"
      }
 done
 
@@ -339,7 +341,7 @@ codesign -v $appPath
 
 # 10.压缩app文件
 msgActionShow "压缩开始"
- 
+
 zipIpaFile=$outputFile"/resign_new.ipa"
 cd $workSpaceFile
 (zip -r $zipIpaFile Payload/ > /dev/null) || {
@@ -352,7 +354,7 @@ msgActionShow "压缩结束"
 msgSucessShow "文件重签名ok了，赶快去试试吧"
 
 # 11.删除工作目录
-#quitProgram 
+#quitProgram
 
 if `$AUTO`
 then
