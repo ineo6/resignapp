@@ -104,6 +104,7 @@ module.exports = class SignApp {
     let mobileprovision = this.config["mobileprovision"];
     let bundleId = this.config["bundleid"] || "null.null";
     let auto = this.config["auto"] || false;
+    let debug = this.config["debug"] || false;
 
     let ipaFile = ipa
     if (!isDirectory(ipaFile) && !fileExist(ipaFile)) {
@@ -124,7 +125,7 @@ module.exports = class SignApp {
 
     ensureDirExist(path.dirname(output));
 
-    if (!isDirectory(mobileprovision) && !fileExist(mobileprovision)) {
+    if (mobileprovision && !isDirectory(mobileprovision) && !fileExist(mobileprovision)) {
       mobileprovision = path.join(currentWorkingDirectory, mobileprovision);
     }
     // console.log("keychain:" + keychain + "\n" + "ipa:" + ipaFile + "\n" + "identity:" + identity + "\n" +"output:" + output + "\n" + "mobileprovision:" + mobileprovision + "\n" + "bundleid:" + bundleId + "\n");
@@ -138,6 +139,7 @@ module.exports = class SignApp {
       mobileprovision: mobileprovision,
       bundleid: bundleId,
       auto: auto,
+      debug: debug,
       signFile: signFile
     }
   }
@@ -151,8 +153,9 @@ module.exports = class SignApp {
     const output = configs.output;
     const bundleId = configs.bundleid;
     const auto = configs.auto;
+    const debug = configs.debug;
 
-    const args = [signFile, ipaFile, identity, mobileprovision, output, keychain, auto];
+    const args = [signFile, ipaFile, identity, mobileprovision, output, keychain, auto, debug];
 
     if (bundleId.length > 0) {
       args.push(bundleId);
