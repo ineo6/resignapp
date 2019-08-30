@@ -4,8 +4,9 @@
 
 const iosDevice = require('node-ios-device');
 const program = require('commander');
+const packageJson = require('../package.json');
 
-program.version("1.0.0")
+program.version(packageJson.version)
     .option('-a, --app <path>', 'the path of app.')
     .option('--debug', 'enable debugger')
     .parse(process.argv);
