@@ -71,7 +71,7 @@ module.exports = function (args) {
 
     inquirer.prompt(questions).then(function (answers) {
 
-      const projectName = answers.name || 'ant-design-pro-template';
+      const projectName = answers.name || 'resign-app-template';
       const targetPath = path.join(cwd, answers.path || './');
 
       if (exists(path.join(targetPath, projectName))) {
@@ -101,7 +101,7 @@ module.exports = function (args) {
           shell.exec(`cd ${path.join(targetPath, projectName)} && ${npm} install`, function () {
             console.log(chalk.green(npm + ' install end'));
             spinnerInstall.stop();
-            console.log('Visit https://pro.ant.design to learn more.');
+            // console.log('Visit https://pro.ant.design to learn more.');
           });
         }
       })

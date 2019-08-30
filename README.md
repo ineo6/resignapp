@@ -4,29 +4,25 @@ Rebuild and install app without jailbreak.
 
 # Usage
 
-```
+```sh
 $ npm install rebuildapp -g
-$ mkdir tweak-demo && cd tweak-demo
+
+# create template in your workspace
 $ rebuildapp --new
-```
 
-pack ipa
+$ cd $workspace
 
-```
-// auto search
-// 1. find provisitionFile
-// 2. find bundleId
+# pack ipa
+# auto find provisitionFile、bundleId、ipa
 $ rebuildapp
 
-// pass file
-$ rebuildapp  -i "iPhone Developer: xxx" -b "com.xx.test" -m ./embedded.mobileprovision -o result.ipa xxx.ipa
 ```
 
 more command
 
 
-```bash
-  Usage: rebuildapp [--options ...] [ipafile]
+```sh
+  Usage: rebuildapp [--options] [ipafile]
 
   Options:
 
@@ -37,25 +33,23 @@ more command
     -k, --keychain [KEYCHAIN]                 Specify alternative keychain file
     -m, --mobileprovision [FILE]]             Specify the mobileprovision file to use
     -o, --output [APP.ipa]                    Path to the output IPA filename
-    -ai, --auto                               auto install
+    -a, --auto                                auto install
     -h, --help                                output usage information
   Examples:
 
-    $ resignapp -i "iPhone Distribution:xxx" -b "com.xx.test" test-app.ipa
+    $ rebuildapp --auto wechat.ipa
 
 ```
 
-# Templates
+# Template
 
-```
+```sh
 .
 ├── README.md
-├── embedded.mobileprovision
-├── lib                           # 待注入dylib
-│   └── *.dylib
-├── output
-├── tool                          # 工具
-│   ├── libsubstrate.dylib
-│   └── yololib
-└── workSpace                     # 工作区域
+├── embedded.mobileprovision         
+├── lib
+│   └── WeChatRedEnvelop.dylib       # dylib
+└── tool                             # dylib tool
+    ├── libsubstrate.dylib
+    └── yololib
 ```

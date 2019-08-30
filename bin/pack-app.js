@@ -18,7 +18,7 @@ program.version(packageJson.version)
     .option('-k, --keychain [KEYCHAIN]', 'Specify alternative keychain file')
     .option('-m, --mobileprovision [FILE]]', 'Specify the mobileprovision file to use')
     .option('-o, --output [APP.ipa]', 'Path to the output IPA filename')
-    .option('-ai, --auto', 'auto install')
+    .option('-a, --auto', 'auto install')
     .option('-d, --debug','debug mode')
     //.option('[ipafile]', 'Path to the IPA file to resign').arguments('<cmd> [env]')
     .arguments('<ipafile>')
@@ -31,7 +31,7 @@ program.parse(process.argv);
 program.on('--help', function () {
     console.log('  Examples:');
     console.log('');
-    console.log('    $ resignapp -i "iPhone Distribution:xxx" -b "com.xx.test" test-app.ipa');
+    console.log('    $ rebuildapp --auto wechat.ipa');
     console.log('');
 });
 
