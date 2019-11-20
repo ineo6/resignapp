@@ -78,7 +78,7 @@ function createWorkSpace()
     (mkdir  $currentFile$workSpace)&& {
         if [ $hiddenWorkspace == 1 ]
         then
-            if [ !$Debug ]
+            if [ ! $Debug ]
             then
                 # chflags nohidden 显示指定隐藏文件
                 chflags hidden $currentFile$workSpace
@@ -104,7 +104,7 @@ function quitProgram()
         msgErrorShow $1
     fi
 
-    if [ !$Debug ]
+    if [ ! $Debug ]
     then
         rm -rf $workSpaceFile
     fi
@@ -231,8 +231,10 @@ then
     msgActionShow "提取bundleId开始"
     applicationIdentifier=`/usr/libexec/PlistBuddy -c "Print :application-identifier " ${entitlementsPlist}`
     bundleId=${applicationIdentifier#*.}
-    msgActionShow "提取bundleId结束; BundleId: $bundleId "
+    msgActionShow "提取bundleId结束"
 fi
+
+msgActionShow "BundleId: $bundleId "
 
 # 4.匹配provisionfile与证书
 msgActionShow "开始验证provisionfile与证书是否匹配"
@@ -351,22 +353,13 @@ cd $workSpaceFile
 cd ..
 
 msgActionShow "压缩结束"
-msgSucessShow "文件重签名ok了，赶快去试试吧"
+msgSucessShow "文件重签名完成，赶快去试试吧"
 
-# 11.删除工作目录
-#quitProgram
 
 if `$AUTO`
 then
     easy-app-install --app "$appPath" --debug
 fi
 
+# 11.删除工作目录
 quitProgram
-
-# 10.10以后需要设置xcode的$(SDKROOT)/ResourceRules.plist，才可以用地下的大包
-# (codesign --preserve-metadata=identifier,entitlements,resource-rules -f -s ${distributionCer} ${appPath}) || {
-# ## if code sign error, will to here
-#     msgErrorShow "失败了"
-#     rm -rf Payload/
-#     exit
-# }
