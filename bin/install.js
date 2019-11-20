@@ -39,6 +39,13 @@ function install(path) {
         .on('error', function (err) {
             console.error('Error!', err);
         });
+
+    setTimeout(() => {
+        // turn off tracking after 1 minute
+        handle.stop();
+
+        console.log("install time out")
+    }, 60000);
 }
 
 if (program.app) {
